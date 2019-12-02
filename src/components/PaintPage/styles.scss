@@ -1,0 +1,36 @@
+.paint-container {
+    margin: 150px 200px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 20px;
+}
+
+.canvas-container {
+    margin-top: 15px;
+}
+
+.input-margin {
+    margin-right: 10px;
+}
+
+.canvas-container {
+    width: 800px;
+    height: 500px;
+    border: 1px solid #444141;
+    background: #888686;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.canvas-row {
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+.canvas-item {
+    width: 30px;
+    border: 1px solid black;
+    margin: 1px;
+}
