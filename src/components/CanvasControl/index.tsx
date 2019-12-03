@@ -18,7 +18,6 @@ const CanvasControl: React.FC<CanvasControlType> = props => {
       XCoordinate: parseInt(XCoordinate),
       YCoordinate: parseInt(YCoordinate),
     });
-    setCreateCanvas(false);
   };
   return (
     <div>

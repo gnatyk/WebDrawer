@@ -1,0 +1,15 @@
+.shapes-container {
+    margin: 10px 0;
+}
+
+.imput-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    margin-top: 20px;
+}
+
+.inputs-container {
+    margin-bottom: 20px;
+}
