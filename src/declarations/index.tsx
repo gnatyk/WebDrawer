@@ -1,5 +1,5 @@
 export interface CanvasCoordinatesTypes {
-    XCoordinate: string;
-    YCoordinate: string;
+    XCoordinate: number;
+    YCoordinate: number;
 
 }
