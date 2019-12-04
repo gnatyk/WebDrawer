@@ -8,3 +8,13 @@ export interface ShapeCoordinatesTypes {
   coordinateY1: number;
   coordinateY2: number;
 }
+
+export interface ElementCanvas {
+  background: string;
+  isBorder: boolean;
+}
+
+export interface Point {
+  x: number;
+  y: number;
+}

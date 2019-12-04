@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import Select from 'react-select';
 import { Button, Input } from 'semantic-ui-react';
-import { ShapeCoordinatesTypes } from '../../declarations';
+import { Point } from '../../declarations';
 import './styles.scss';
 
 const options = [
@@ -11,7 +11,7 @@ const options = [
 ];
 
 interface ShapesControlType {
-  changeShapesCoordinates: (coordinats: ShapeCoordinatesTypes, shapeType: string) => void;
+  changeShapesCoordinates: (point1: Point, point2: Point, shapeType: string) => void;
 }
 
 const ShapesControl: React.FC<ShapesControlType> = props => {
@@ -34,16 +34,12 @@ const ShapesControl: React.FC<ShapesControlType> = props => {
       setError('coordinates should be a number!');
     } else {
       changeShapesCoordinates(
-        {
-          coordinateX1: parseInt(coordinateX1),
-          coordinateX2: parseInt(coordinateX2),
-          coordinateY1: parseInt(coordinateY1),
-          coordinateY2: parseInt(coordinateY2),
-        },
+        { x: parseInt(coordinateX1), y: parseInt(coordinateY1) },
+        { x: parseInt(coordinateX2), y: parseInt(coordinateY2) },
         shapeType.value,
       );
     }
-  }, [coordinateX1, coordinateX2, coordinateY1, coordinateY2]);
+  }, [coordinateX1, coordinateX2, coordinateY1, coordinateY2, changeShapesCoordinates]);
 
   return (
     <div className="shapes-container">
