@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import Select from 'react-select';
 import { Button, Input } from 'semantic-ui-react';
 import { Point, ElementCanvas } from '../../declarations';
+import { validateFigure, validateBusketFill } from '../../validations';
 import './styles.scss';
 
 const options = [
@@ -11,107 +12,93 @@ const options = [
 ];
 
 interface ShapesControlType {
-  changeShapesCoordinates: (point1: Point, point2: Point, shapeType: string) => void;
+  lineHandler: (point1: Point, point2: Point) => void;
+  rectangleHandler: (point1: Point, point2: Point) => void;
   canvasLayout: ElementCanvas[][];
   bucketFillHandler: (point: Point, color: string) => void;
 }
 
 const ShapesControl: React.FC<ShapesControlType> = props => {
-  const { changeShapesCoordinates, canvasLayout, bucketFillHandler } = props;
+  const { lineHandler, rectangleHandler, bucketFillHandler, canvasLayout } = props;
 
   const [shapeType, setShapeType] = useState<any>({});
-  const [coordinateX1, setCoordinateX1] = useState<string>('');
-  const [coordinateX2, setCoordinateX2] = useState<string>('');
-  const [coordinateY1, setCoordinateY1] = useState<string>('');
-  const [coordinateY2, setCoordinateY2] = useState<string>('');
+  const [x1, setX1] = useState<string>('');
+  const [x2, setX2] = useState<string>('');
+  const [y1, setY1] = useState<string>('');
+  const [y2, setY2] = useState<string>('');
   const [color, setColor] = useState<string>('');
-  const [error, setError] = useState<string>('');
 
   const disableButton = useMemo(
-    () =>
-      shapeType.value === 'busket_fill'
-        ? !coordinateX1 || !coordinateY1
-        : !coordinateX1 || !coordinateX2 || !coordinateY1 || !coordinateY2,
-    [shapeType, coordinateX1, coordinateY1, coordinateX2, coordinateY2],
+    () => (shapeType.value === 'busket_fill' ? !x1 || !y1 : !x1 || !x2 || !y1 || !y2),
+    [shapeType, x1, y1, x2, y2],
   );
 
-  const createBusketFill = useCallback(() => {
-    bucketFillHandler({ x: parseInt(coordinateX1) - 1, y: parseInt(coordinateY1) - 1 }, color);
-  }, [bucketFillHandler, coordinateX1, coordinateY1, color]);
+  const changeType = useCallback((type: string) => {
+    setShapeType(type);
+    setX1('');
+    setX2('');
+    setY1('');
+    setY2('');
+  }, []);
 
   const createShape = useCallback(() => {
+    if (shapeType.value === 'line') {
+      const firstPoint = { x: parseInt(x1) - 1, y: parseInt(y1) - 1 };
+      const secondPoint = { x: parseInt(x2) - 1, y: parseInt(y2) - 1 };
+      const isValid = validateFigure(firstPoint, secondPoint, 'line', canvasLayout);
+      if (isValid) {
+        lineHandler(firstPoint, secondPoint);
+      }
+    }
+    if (shapeType.value === 'rectangle') {
+      const firstPoint = { x: parseInt(x1) - 1, y: parseInt(y1) - 1 };
+      const secondPoint = { x: parseInt(x2) - 1, y: parseInt(y2) - 1 };
+      const isValid = validateFigure(firstPoint, secondPoint, 'rectangle', canvasLayout);
+      if (isValid) {
+        rectangleHandler(firstPoint, secondPoint);
+      }
+    }
     if (shapeType.value === 'busket_fill') {
-      createBusketFill();
-    } else {
-      if (
-        !parseInt(coordinateX1) ||
-        !parseInt(coordinateX2) ||
-        !parseInt(coordinateY1) ||
-        !parseInt(coordinateY2)
-      ) {
-        setError('coordinates should be a number!');
-      } else {
-        changeShapesCoordinates(
-          { x: parseInt(coordinateX1), y: parseInt(coordinateY1) },
-          { x: parseInt(coordinateX2), y: parseInt(coordinateY2) },
-          shapeType.value,
-        );
+      const point = { x: parseInt(x1) - 1, y: parseInt(y1) - 1 };
+      const isValid = validateBusketFill(point, color, canvasLayout);
+      if (isValid) {
+        bucketFillHandler(point, color);
       }
     }
   }, [
-    coordinateX1,
-    coordinateX2,
-    coordinateY1,
-    coordinateY2,
-    changeShapesCoordinates,
-    createBusketFill,
+    x1,
+    x2,
+    y1,
+    y2,
+    color,
+    bucketFillHandler,
+    rectangleHandler,
+    lineHandler,
+    canvasLayout,
+    shapeType.value,
   ]);
 
   return (
     <div className="shapes-container">
-      <Select options={options} value={shapeType} onChange={value => setShapeType(value)} />
+      <Select options={options} value={shapeType} onChange={value => changeType(value)} />
       {shapeType.value && (
         <div>
           {shapeType.value !== 'busket_fill' ? (
             <div className="inputs-container">
               <div className="imput-row">
-                <Input
-                  placeholder="Enter x1"
-                  value={coordinateX1}
-                  onChange={e => setCoordinateX1(e.target.value)}
-                />
-                <Input
-                  placeholder="Enter x2"
-                  value={coordinateX2}
-                  onChange={e => setCoordinateX2(e.target.value)}
-                />
+                <Input placeholder="Enter x1" value={x1} onChange={e => setX1(e.target.value)} />
+                <Input placeholder="Enter x2" value={x2} onChange={e => setX2(e.target.value)} />
               </div>
               <div className="imput-row">
-                <Input
-                  placeholder="Enter y1"
-                  value={coordinateY1}
-                  onChange={e => setCoordinateY1(e.target.value)}
-                />
-                <Input
-                  placeholder="Enter y2"
-                  value={coordinateY2}
-                  onChange={e => setCoordinateY2(e.target.value)}
-                />
+                <Input placeholder="Enter y1" value={y1} onChange={e => setY1(e.target.value)} />
+                <Input placeholder="Enter y2" value={y2} onChange={e => setY2(e.target.value)} />
               </div>
             </div>
           ) : (
             <div className="inputs-container">
               <div className="imput-row">
-                <Input
-                  placeholder="Enter x1"
-                  value={coordinateX1}
-                  onChange={e => setCoordinateX1(e.target.value)}
-                />
-                <Input
-                  placeholder="Enter y1"
-                  value={coordinateY1}
-                  onChange={e => setCoordinateY1(e.target.value)}
-                />
+                <Input placeholder="Enter x1" value={x1} onChange={e => setX1(e.target.value)} />
+                <Input placeholder="Enter y1" value={y1} onChange={e => setY1(e.target.value)} />
               </div>
               <div className="imput-row">
                 <input type="color" value={color} onChange={e => setColor(e.target.value)} />

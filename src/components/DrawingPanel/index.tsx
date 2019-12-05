@@ -1,6 +1,6 @@
 import React from 'react';
-import './styles.scss';
 import { ElementCanvas } from '../../declarations';
+import './styles.scss';
 
 interface DrawingPanelTypes {
   canvasLayout: ElementCanvas[][];
@@ -9,15 +9,18 @@ interface DrawingPanelTypes {
 const DrawingPanel: React.FC<DrawingPanelTypes> = props => {
   const { canvasLayout } = props;
   return (
-    <div className="canvas-container">
-      <div className="layout-container">
-        {canvasLayout.map((i: ElementCanvas[], index: number) => (
-          <div className="canvas-row" key={index}>
-            {i.map((j: ElementCanvas, indexJ: number) => (
-              <div key={indexJ} className="canvas-item" style={{ background: j.background }} />
-            ))}
-          </div>
-        ))}
+    <div>
+      <div>Max: x = 24, y = 16</div>
+      <div className="canvas-container">
+        <div className="layout-container">
+          {canvasLayout.map((i: ElementCanvas[], index: number) => (
+            <div className="canvas-row" key={index}>
+              {i.map((j: ElementCanvas, indexJ: number) => (
+                <div key={indexJ} className="canvas-item" style={{ background: j.background }} />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

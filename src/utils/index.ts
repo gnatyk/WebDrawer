@@ -6,8 +6,8 @@ export const drawLine = (point1: Point, point2: Point, canvasLayout: ElementCanv
     //vertical
     const startPoint = point1.y > point2.y ? point2 : point1;
     const endPoint = point1.y > point2.y ? point1 : point2;
-    for (let i: number = startPoint.y - 1; i < endPoint.y; i++) {
-      newCanvasLayout[i][startPoint.x - 1] = {
+    for (let i: number = startPoint.y; i <= endPoint.y; i++) {
+      newCanvasLayout[i][startPoint.x] = {
         background: 'red',
         isBorder: true,
       };
@@ -16,8 +16,8 @@ export const drawLine = (point1: Point, point2: Point, canvasLayout: ElementCanv
     //horizontal
     const startPoint = point1.x > point2.x ? point2 : point1;
     const endPoint = point1.x > point2.x ? point1 : point2;
-    for (let i: number = startPoint.x - 1; i < endPoint.x; i++) {
-      newCanvasLayout[startPoint.y - 1][i] = {
+    for (let i: number = startPoint.x; i <= endPoint.x; i++) {
+      newCanvasLayout[startPoint.y][i] = {
         background: 'red',
         isBorder: true,
       };
