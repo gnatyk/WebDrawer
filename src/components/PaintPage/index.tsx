@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CanvasCoordinatesTypes, ElementCanvas, Point } from '../../declarations';
-import { drawLine, drawRectangle } from '../../utils';
+import { drawLine, drawRectangle, fillBusket } from '../../utils';
 import CanvasControl from '../CanvasControl';
 import DrawingPanel from '../DrawingPanel';
 import ShapesControl from '../ShapesControl';
@@ -41,9 +41,18 @@ const PaintPage: React.FC = () => {
     [canvasLayout, setCanvasLayout],
   );
 
-  const RectangleHandler = useCallback(
+  const rectangleHandler = useCallback(
     (point1: Point, point2: Point) => {
       const newCanvasLayout = drawRectangle(point1, point2, canvasLayout);
+      setCanvasLayout(newCanvasLayout);
+    },
+    [canvasLayout, setCanvasLayout],
+  );
+
+  const bucketFillHandler = useCallback(
+    (point: Point, color: string) => {
+      const copyCanvasLayout = canvasLayout.map(i => i.map(j => ({ ...j })));
+      const newCanvasLayout = fillBusket(point, copyCanvasLayout, color);
       setCanvasLayout(newCanvasLayout);
     },
     [canvasLayout, setCanvasLayout],
@@ -55,10 +64,10 @@ const PaintPage: React.FC = () => {
         lineHandler(point1, point2);
       }
       if (shapeType === 'rectangle') {
-        RectangleHandler(point1, point2);
+        rectangleHandler(point1, point2);
       }
     },
-    [lineHandler, RectangleHandler],
+    [lineHandler, rectangleHandler],
   );
 
   return (
@@ -66,7 +75,11 @@ const PaintPage: React.FC = () => {
       <div>
         <CanvasControl changeCanvasCoordinates={changeCanvasCoordinates} />
         {canvasCoordinates.XCoordinate && (
-          <ShapesControl changeShapesCoordinates={changeShapesCoordinates} />
+          <ShapesControl
+            changeShapesCoordinates={changeShapesCoordinates}
+            canvasLayout={canvasLayout}
+            bucketFillHandler={bucketFillHandler}
+          />
         )}
       </div>
       <DrawingPanel canvasLayout={canvasLayout} />

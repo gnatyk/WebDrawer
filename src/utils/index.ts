@@ -33,3 +33,25 @@ export const drawRectangle = (point1: Point, point2: Point, canvasLayout: Elemen
   const line4 = drawLine({ x: point1.x, y: point2.y }, { x: point1.x, y: point1.y }, line3);
   return line4;
 };
+
+export const fillBusket = (point: Point, canvasLayout: ElementCanvas[][], color: string) => {
+  if (point.y === canvasLayout.length || point.y === -1) {
+    return canvasLayout;
+  }
+  if (point.x === canvasLayout[point.y].length || point.x === -1) {
+    return canvasLayout;
+  }
+  if (canvasLayout[point.y][point.x].background === color) {
+    return canvasLayout;
+  }
+  if (canvasLayout[point.y][point.x].isBorder) {
+    return canvasLayout;
+  }
+
+  canvasLayout[point.y][point.x].background = color;
+  fillBusket({ x: point.x + 1, y: point.y }, canvasLayout, color);
+  fillBusket({ x: point.x, y: point.y + 1 }, canvasLayout, color);
+  fillBusket({ x: point.x - 1, y: point.y }, canvasLayout, color);
+  fillBusket({ x: point.x, y: point.y - 1 }, canvasLayout, color);
+  return canvasLayout;
+};
