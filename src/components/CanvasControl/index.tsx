@@ -16,13 +16,17 @@ const CanvasControl: React.FC<CanvasControlType> = props => {
 
   const validate = useCallback(() => {
     let isValid = true;
-    const numberX = parseInt(x) - 1;
-    const numberY = parseInt(y) - 1;
-    if (!numberX || !numberY) {
+    const numberX = parseInt(x);
+    const numberY = parseInt(y);
+    if (
+      typeof numberX !== 'number' ||
+      typeof numberY !== 'number' ||
+      isNaN(numberX) ||
+      isNaN(numberY)
+    ) {
       NotificationManager.error('Please enter a number!', 'Error');
       isValid = false;
-    }
-    if (numberX >= 24 || numberX < 0 || numberY >= 16 || numberY < 0) {
+    } else if (numberX > 24 || numberX < 1 || numberY > 16 || numberY < 1) {
       NotificationManager.error('You are out of the field!', 'Error');
       isValid = false;
     }
@@ -30,8 +34,8 @@ const CanvasControl: React.FC<CanvasControlType> = props => {
   }, [x, y]);
 
   const onCreateCanvas = useCallback(() => {
-    const numbberX = parseInt(x) - 1;
-    const numbberY = parseInt(y) - 1;
+    const numbberX = parseInt(x);
+    const numbberY = parseInt(y);
     const isValid = validate();
     if (isValid) {
       createCanvas(numbberX, numbberY);

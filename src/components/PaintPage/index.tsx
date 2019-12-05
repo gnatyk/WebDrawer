@@ -12,7 +12,7 @@ const PaintPage: React.FC = () => {
   const createCanvas = useCallback(
     (x: number, y: number) => {
       const matrix = [];
-      for (let i: number = 0; i <= y; i++) {
+      for (let i: number = 0; i < y; i++) {
         const array = new Array(x);
         matrix[i] = array.fill({ isBorder: false }, 0, array.length);
       }
