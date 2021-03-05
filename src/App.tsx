@@ -8,7 +8,8 @@ import './App.css';
 const App: React.FC = () => {
   return (
     <>
-      <PaintPage /> <NotificationContainer />
+      <PaintPage />
+      <NotificationContainer />
     </>
   );
 };
