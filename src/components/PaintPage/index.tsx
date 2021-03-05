@@ -6,16 +6,21 @@ import DrawingPanel from '../DrawingPanel';
 import ShapesControl from '../ShapesControl';
 import './styles.scss';
 
+export const createCanvas = (x: number, y: number) => {
+  const matrix = [];
+  for (let i: number = 0; i < y; i++) {
+    const array = new Array(x);
+    matrix[i] = array.fill({ isBorder: false }, 0, array.length);
+  }
+  return matrix;
+}
+
 const PaintPage: React.FC = () => {
   const [canvasLayout, setCanvasLayout] = useState<ElementCanvas[][]>([]);
 
-  const createCanvas = useCallback(
+  const onSetCanvas = useCallback(
     (x: number, y: number) => {
-      const matrix = [];
-      for (let i: number = 0; i < y; i++) {
-        const array = new Array(x);
-        matrix[i] = array.fill({ isBorder: false }, 0, array.length);
-      }
+      const matrix = createCanvas(x,y)
       setCanvasLayout(matrix);
     },
     [setCanvasLayout],
@@ -49,7 +54,7 @@ const PaintPage: React.FC = () => {
   return (
     <div className="paint-container">
       <div>
-        <CanvasControl createCanvas={createCanvas} />
+        <CanvasControl createCanvas={onSetCanvas} />
         {canvasLayout.length > 0 && (
           <ShapesControl
             rectangleHandler={rectangleHandler}

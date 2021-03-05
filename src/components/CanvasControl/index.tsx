@@ -14,7 +14,7 @@ const CanvasControl: React.FC<CanvasControlType> = props => {
   const [x, setX] = useState<string>('');
   const [y, setY] = useState<string>('');
 
-  const validate = useCallback(() => {
+  const validate = () => {
     let isValid = true;
     const numberX = parseInt(x);
     const numberY = parseInt(y);
@@ -31,7 +31,7 @@ const CanvasControl: React.FC<CanvasControlType> = props => {
       isValid = false;
     }
     return isValid;
-  }, [x, y]);
+  };
 
   const onCreateCanvas = useCallback(() => {
     const numbberX = parseInt(x);
