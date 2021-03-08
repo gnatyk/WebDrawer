@@ -18,38 +18,26 @@ export const createCanvas = (x: number, y: number) => {
 const PaintPage: React.FC = () => {
   const [canvasLayout, setCanvasLayout] = useState<ElementCanvas[][]>([]);
 
-  const onSetCanvas = useCallback(
-    (x: number, y: number) => {
-      const matrix = createCanvas(x,y)
-      setCanvasLayout(matrix);
-    },
-    [setCanvasLayout],
-  );
+  const onSetCanvas = (x: number, y: number) => {
+    const matrix = createCanvas(x,y)
+    setCanvasLayout(matrix);
+  }
 
-  const lineHandler = useCallback(
-    (point1: Point, point2: Point) => {
-      const newCanvasLayout = drawLine(point1, point2, canvasLayout);
-      setCanvasLayout(newCanvasLayout);
-    },
-    [canvasLayout, setCanvasLayout],
-  );
+  const lineHandler =  (point1: Point, point2: Point) => {
+    const newCanvasLayout = drawLine(point1, point2, canvasLayout);
+    setCanvasLayout(newCanvasLayout);
+  };
 
-  const rectangleHandler = useCallback(
-    (point1: Point, point2: Point) => {
-      const newCanvasLayout = drawRectangle(point1, point2, canvasLayout);
-      setCanvasLayout(newCanvasLayout);
-    },
-    [canvasLayout, setCanvasLayout],
-  );
+  const rectangleHandler =  (point1: Point, point2: Point) => {
+    const newCanvasLayout = drawRectangle(point1, point2, canvasLayout);
+    setCanvasLayout(newCanvasLayout);
+  };
 
-  const bucketFillHandler = useCallback(
-    (point: Point, color: string) => {
-      const copyCanvasLayout = canvasLayout.map(i => i.map(j => ({ ...j })));
-      const newCanvasLayout = fillBusket(point, copyCanvasLayout, color);
-      setCanvasLayout(newCanvasLayout);
-    },
-    [canvasLayout, setCanvasLayout],
-  );
+  const bucketFillHandler = (point: Point, color: string) => {
+    const copyCanvasLayout = canvasLayout.map(i => i.map(j => ({ ...j })));
+    const newCanvasLayout = fillBusket(point, copyCanvasLayout, color);
+    setCanvasLayout(newCanvasLayout);
+  };
 
   return (
     <div className="paint-container">

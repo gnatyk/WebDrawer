@@ -3,7 +3,7 @@ import {shallow} from '../../enzyme';
 import Select from 'react-select';
 // @ts-ignore
 import { Button, Input } from 'semantic-ui-react';
-
+import { validateFigure, validateBusketFill } from '../../validations';
 import ShapesControl from './index';
 
 
@@ -14,9 +14,6 @@ jest.mock('../../validations', () => (
       validateBusketFill: jest.fn()
     }
   ))
-
-  import { validateFigure, validateBusketFill } from '../../validations';
-
 
 describe('<ShapesControl />', () => {
      const lineHandler = jest.fn();
