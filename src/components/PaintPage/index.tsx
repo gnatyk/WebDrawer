@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { ElementCanvas, Point } from '../../declarations';
 import { drawLine, drawRectangle, fillBusket } from '../../utils';
 import CanvasControl from '../CanvasControl';
@@ -41,7 +41,7 @@ const PaintPage: React.FC = () => {
 
   return (
     <div className="paint-container">
-      <div>
+      <div style={{position: 'relative'}}>
         <CanvasControl createCanvas={onSetCanvas} />
         {canvasLayout.length > 0 && (
           <ShapesControl

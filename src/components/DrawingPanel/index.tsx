@@ -10,7 +10,7 @@ const DrawingPanel: React.FC<DrawingPanelTypes> = props => {
   const { canvasLayout } = props;
   return (
     <div>
-      <div>Max: x = 24, y = 16</div>
+      <div>Max: x = 100 y = 100</div>
       <div className="canvas-container">
         <div className="layout-container">
           {canvasLayout.map((i: ElementCanvas[], index: number) => (

@@ -26,7 +26,7 @@ const ShapesControl: React.FC<ShapesControlType> = props => {
   const [x2, setX2] = useState<string>('');
   const [y1, setY1] = useState<string>('');
   const [y2, setY2] = useState<string>('');
-  const [color, setColor] = useState<string>('');
+  const [color, setColor] = useState<string>('#77bae9');
 
   const disableButton = useMemo(
     () => (shapeType.value === 'busket_fill' ? !x1 || !y1 : !x1 || !x2 || !y1 || !y2),

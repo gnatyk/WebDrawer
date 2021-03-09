@@ -26,7 +26,7 @@ const CanvasControl: React.FC<CanvasControlType> = props => {
     ) {
       NotificationManager.error('Please enter a number!', 'Error');
       isValid = false;
-    } else if (numberX > 24 || numberX < 1 || numberY > 16 || numberY < 1) {
+    } else if (numberX > 100 || numberX < 1 || numberY > 100 || numberY < 1) {
       NotificationManager.error('You are out of the field!', 'Error');
       isValid = false;
     }
@@ -57,6 +57,9 @@ const CanvasControl: React.FC<CanvasControlType> = props => {
           </div>
           <Button disabled={!x || !y} onClick={() => onCreateCanvas()}>
             Create
+          </Button>
+          <Button disabled={!x || !y} className="reset-button" onClick={() => {setY(''); setX(''); createCanvas(0,0)}}>
+            Reset
           </Button>
         </div>
       )}
