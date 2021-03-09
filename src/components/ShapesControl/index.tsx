@@ -18,7 +18,7 @@ interface ShapesControlType {
   bucketFillHandler: (point: Point, color: string) => void;
 }
 
-const ShapesControl: React.FC<ShapesControlType> = props => {
+const ShapesControl: React.FC<ShapesControlType> = (props) => {
   const { lineHandler, rectangleHandler, bucketFillHandler, canvasLayout } = props;
 
   const [shapeType, setShapeType] = useState<any>({});
@@ -33,8 +33,8 @@ const ShapesControl: React.FC<ShapesControlType> = props => {
     [shapeType, x1, y1, x2, y2],
   );
 
-  const changeType = useCallback((type: string) => {
-    setShapeType(type);
+  const changeType = useCallback((value: { value: string; label: string }) => {
+    setShapeType(value);
     setX1('');
     setX2('');
     setY1('');
@@ -80,28 +80,28 @@ const ShapesControl: React.FC<ShapesControlType> = props => {
 
   return (
     <div className="shapes-container">
-      <Select options={options} value={shapeType} onChange={value => changeType(value)} />
+      <Select options={options} value={shapeType} onChange={(value) => changeType(value!!)} />
       {shapeType.value && (
         <div>
           {shapeType.value !== 'busket_fill' ? (
             <div className="inputs-container">
               <div className="imput-row">
-                <Input placeholder="Enter x1" value={x1} onChange={e => setX1(e.target.value)} />
-                <Input placeholder="Enter x2" value={x2} onChange={e => setX2(e.target.value)} />
+                <Input placeholder="Enter x1" value={x1} onChange={(e) => setX1(e.target.value)} />
+                <Input placeholder="Enter x2" value={x2} onChange={(e) => setX2(e.target.value)} />
               </div>
               <div className="imput-row">
-                <Input placeholder="Enter y1" value={y1} onChange={e => setY1(e.target.value)} />
-                <Input placeholder="Enter y2" value={y2} onChange={e => setY2(e.target.value)} />
+                <Input placeholder="Enter y1" value={y1} onChange={(e) => setY1(e.target.value)} />
+                <Input placeholder="Enter y2" value={y2} onChange={(e) => setY2(e.target.value)} />
               </div>
             </div>
           ) : (
             <div className="inputs-container">
               <div className="imput-row">
-                <Input placeholder="Enter x1" value={x1} onChange={e => setX1(e.target.value)} />
-                <Input placeholder="Enter y1" value={y1} onChange={e => setY1(e.target.value)} />
+                <Input placeholder="Enter x1" value={x1} onChange={(e) => setX1(e.target.value)} />
+                <Input placeholder="Enter y1" value={y1} onChange={(e) => setY1(e.target.value)} />
               </div>
               <div className="imput-row">
-                <input type="color" value={color} onChange={e => setColor(e.target.value)} />
+                <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
               </div>
             </div>
           )}

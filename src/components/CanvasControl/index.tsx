@@ -2,13 +2,14 @@ import React, { useState, useCallback } from 'react';
 import { Button, Input } from 'semantic-ui-react';
 // @ts-ignore
 import { NotificationManager } from 'react-notifications';
+import { error } from '../../utils/constants';
 import './styles.scss';
 
 interface CanvasControlType {
   createCanvas: (x: number, y: number) => void;
 }
 
-const CanvasControl: React.FC<CanvasControlType> = props => {
+const CanvasControl: React.FC<CanvasControlType> = (props) => {
   const { createCanvas } = props;
   const [isCreateCanvas, setCreateCanvas] = useState<boolean>(false);
   const [x, setX] = useState<string>('');
@@ -24,10 +25,10 @@ const CanvasControl: React.FC<CanvasControlType> = props => {
       isNaN(numberX) ||
       isNaN(numberY)
     ) {
-      NotificationManager.error('Please enter a number!', 'Error');
+      NotificationManager.error(error.notNumber, 'Error');
       isValid = false;
     } else if (numberX > 100 || numberX < 1 || numberY > 100 || numberY < 1) {
-      NotificationManager.error('You are out of the field!', 'Error');
+      NotificationManager.error(error.outOfField, 'Error');
       isValid = false;
     }
     return isValid;
@@ -51,14 +52,22 @@ const CanvasControl: React.FC<CanvasControlType> = props => {
               className="input-margin"
               placeholder="Enter X"
               value={x}
-              onChange={e => setX(e.target.value)}
+              onChange={(e) => setX(e.target.value)}
             />
-            <Input placeholder="Enter Y" value={y} onChange={e => setY(e.target.value)} />
+            <Input placeholder="Enter Y" value={y} onChange={(e) => setY(e.target.value)} />
           </div>
           <Button disabled={!x || !y} onClick={() => onCreateCanvas()}>
             Create
           </Button>
-          <Button disabled={!x || !y} className="reset-button" onClick={() => {setY(''); setX(''); createCanvas(0,0)}}>
+          <Button
+            disabled={!x || !y}
+            className="reset-button"
+            onClick={() => {
+              setY('');
+              setX('');
+              createCanvas(0, 0);
+            }}
+          >
             Reset
           </Button>
         </div>

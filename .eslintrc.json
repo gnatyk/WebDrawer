@@ -1,0 +1,17 @@
+{
+    "extends": ["react-app", "react-app/jest"],
+    "plugins": ["jsx-a11y"],
+    "globals": {
+        "Office": true
+      },
+      "rules": {
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "off",
+          {
+            "args": "none",
+            "ignoreRestSiblings": true
+          }
+        ]
+      }
+}

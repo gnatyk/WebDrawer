@@ -1,82 +1,90 @@
 import { validatePoint, validateFigure, validateBusketFill } from './index';
 // @ts-ignore
 import { NotificationManager } from 'react-notifications';
+import { error, color } from '../utils/constants';
 
 
 const canvasLayoutStart = [
-    [{isBorder: false, background:''}, {isBorder: false, background:''}],
-    [{isBorder: false, background:''}, {isBorder: false, background:''}]
+    [{ isBorder: false, background: '' }, { isBorder: false, background: '' }],
+    [{ isBorder: false, background: '' }, { isBorder: false, background: '' }]
 ];
 
-test('Validate point with right value', () => {
-    expect(validatePoint({x: 0, y: 0}, canvasLayoutStart)).toBe('');
-});
+describe('Validations', () => {
+    describe('Validate Point', () => {
+        it('Should return empty string with right value', () => {
+            expect(validatePoint({ x: 0, y: 0 }, canvasLayoutStart)).toBe('');
+        })
+        it(`Should return ${error.notNumber} string with string value`, () => {
+            //@ts-ignore
+            expect(validatePoint({ x: 'f', y: 0 }, canvasLayoutStart)).toBe(error.notNumber);
+        })
+        it(`Should return ${error.outOfField} string with invalid x value`, () => {
+            expect(validatePoint({ x: -1, y: 0 }, canvasLayoutStart)).toBe(error.outOfField);
+        })
 
-test('Validate point with not number value', () => {
-    //@ts-ignore
-    expect(validatePoint({x: 'f', y: 0}, canvasLayoutStart)).toBe('Must be a number');
-});
+        it(`Should return ${error.outOfField} string with invalid y value`, () => {
+            expect(validatePoint({ x: 0, y: -1 }, canvasLayoutStart)).toBe(error.outOfField);
+        });
 
-test('Validate point with x less than mimal border value', () => {
-    expect(validatePoint({x: -1 , y: 0}, canvasLayoutStart)).toBe('You are out of the field');
-});
 
-test('Validate point with y less than mimal border value', () => {
-    expect(validatePoint({x: 0 , y: -1}, canvasLayoutStart)).toBe('You are out of the field');
-});
+        it(`Should return ${error.outOfField} string with with x more than max border`, () => {
+            expect(validatePoint({ x: 2, y: 0 }, canvasLayoutStart)).toBe(error.outOfField);
+        });
 
-test('Validate point with x more than mimal border value', () => {
-    expect(validatePoint({x: 2 , y: 0}, canvasLayoutStart)).toBe('You are out of the field');
-});
+        it(`Should return ${error.outOfField} string with with xy more than max border`, () => {
+            expect(validatePoint({ x: 0, y: 2 }, canvasLayoutStart)).toBe(error.outOfField);
+        });
+    })
 
-test('Validate point with y more than mimal border value', () => {
-    expect(validatePoint({x: 0 , y: 2}, canvasLayoutStart)).toBe('You are out of the field');
-});
+    describe('Validate Line figure', () => {
+        it('Should return true with valid values', () => {
+            expect(validateFigure({ x: 0, y: 0 }, { x: 0, y: 1 }, 'line', canvasLayoutStart)).toBe(true);
+        });
 
-test('Validate line figure with right value', () => {
-    expect(validateFigure({x: 0 , y: 0}, {x: 0, y: 1}, 'line', canvasLayoutStart)).toBe(true);
-});
+        it('Should return false with not same x or y', () => {
+            NotificationManager.error = jest.fn();
+            expect(validateFigure({ x: 0, y: 0 }, { x: 1, y: 1 }, 'line', canvasLayoutStart)).toBe(false);
+            expect(NotificationManager.error).toBeCalledWith(error.notSamePont, 'Error');
+        });
 
-test('Validate line figure with not same x or y', () => {
-    NotificationManager.error = jest.fn();
-    expect(validateFigure({x: 0 , y: 0}, {x: 1, y: 1}, 'line', canvasLayoutStart)).toBe(false);
-    expect(NotificationManager.error).toBeCalledWith('The line must have the same x or y ', 'Error');
-});
+        it('Should return false with invalid values less than mimal border value', () => {
+            expect(validateFigure({ x: 0, y: 0 }, { x: 0, y: -1 }, 'line', canvasLayoutStart)).toBe(false);
+        });
 
-test('Validate line figure with invalid values less than mimal border value', () => {
-    expect(validateFigure({x: 0 , y: 0}, {x: 0, y: -1}, 'line', canvasLayoutStart)).toBe(false);
-});
+        it('Should return false with invalid values more than mimal border value', () => {
+            expect(validateFigure({ x: 0, y: 0 }, { x: 0, y: 3 }, 'line', canvasLayoutStart)).toBe(false);
+        });
+    })
+    describe('Validate Rectangle figure', () => {
+        it('Should return true figure with right values', () => {
+            expect(validateFigure({ x: 0, y: 0 }, { x: 1, y: 1 }, 'rectangle', canvasLayoutStart)).toBe(true);
+        });
 
-test('Validate line figure with invalid values more than mimal border value', () => {
-    expect(validateFigure({x: 0 , y: 0}, {x: 0, y: 3}, 'line', canvasLayoutStart)).toBe(false);
-});
+        it('Should return false with invalid values less than mimal border value', () => {
+            expect(validateFigure({ x: -1, y: 0 }, { x: 1, y: 1 }, 'rectangle', canvasLayoutStart)).toBe(false);
+        });
 
-test('Validate rectangle figure with right values', () => {
-    expect(validateFigure({x: 0 , y: 0}, {x: 1, y: 1}, 'rectangle', canvasLayoutStart)).toBe(true);
-});
+        it('Should return false with invalid values more than mimal border value', () => {
+            expect(validateFigure({ x: 0, y: 0 }, { x: 3, y: 1 }, 'rectangle', canvasLayoutStart)).toBe(false);
+        });
+    })
+    describe('Validate BusketFill figure', () => {
+        it('Should return true with valid values', () => {
+            expect(validateBusketFill({ x: 0, y: 1 }, color.fillBusketColor, canvasLayoutStart)).toBe(true);
+        });
 
-test('Validate rectangle figure with invalid values less than mimal border value', () => {
-    expect(validateFigure({x: -1 , y: 0}, {x: 1, y: 1}, 'rectangle', canvasLayoutStart)).toBe(false);
-});
+        it('Should return error with empty color', () => {
+            NotificationManager.error = jest.fn();
+            expect(validateBusketFill({ x: 0, y: 1 }, '', canvasLayoutStart)).toBe(false);
+            expect(NotificationManager.error).toBeCalledWith(error.emptyColor, 'Error');
+        });
 
-test('Validate rectangle figure with invalid values more than mimal border value', () => {
-    expect(validateFigure({x: 0 , y: 0}, {x: 3, y: 1}, 'rectangle', canvasLayoutStart)).toBe(false);
-});
+        it('Should return false with values more than mimal border value', () => {
+            expect(validateBusketFill({ x: 0, y: 11 }, color.fillBusketColor, canvasLayoutStart)).toBe(false);
+        });
 
-test('Validate BusketFill with valid values', () => {
-    expect(validateBusketFill({x: 0 , y: 1}, '#333', canvasLayoutStart)).toBe(true);
-});
-
-test('Validate BusketFill with empty color', () => {
-    NotificationManager.error = jest.fn();
-    expect(validateBusketFill({x: 0 , y: 1}, '', canvasLayoutStart)).toBe(false);
-    expect(NotificationManager.error).toBeCalledWith('Please choose a color!', 'Error');
-});
-
-test('Validate BusketFill with values more than mimal border value', () => {
-    expect(validateBusketFill({x: 0 , y: 11}, '#333', canvasLayoutStart)).toBe(false);
-});
-
-test('Validate BusketFill with values less than mimal border value', () => {
-    expect(validateBusketFill({x: 0 , y: -11}, '#333', canvasLayoutStart)).toBe(false);
-});
+        it('Should return false with values less than mimal border value', () => {
+            expect(validateBusketFill({ x: 0, y: -11 }, color.fillBusketColor, canvasLayoutStart)).toBe(false);
+        });
+    })
+})

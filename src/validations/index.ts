@@ -1,6 +1,7 @@
 import { Point, ElementCanvas } from '../declarations';
 // @ts-ignore
 import { NotificationManager } from 'react-notifications';
+import { error } from '../utils/constants';
 
 export const validateBusketFill = (
   point: Point,
@@ -8,13 +9,13 @@ export const validateBusketFill = (
   canvasLayout: ElementCanvas[][],
 ) => {
   let isValid = true;
-  const error = validatePoint(point, canvasLayout);
-  if (error) {
+  const validateError = validatePoint(point, canvasLayout);
+  if (validateError) {
     NotificationManager.error(error, 'Error');
     isValid = false;
   }
   if (!color) {
-    NotificationManager.error('Please choose a color!', 'Error');
+    NotificationManager.error(error.emptyColor, 'Error');
     isValid = false;
   }
   return isValid;
@@ -35,7 +36,7 @@ export const validateFigure = (
       NotificationManager.error(lineError, 'Error');
       isValid = false;
     } else if (point1.x !== point2.x && point1.y !== point2.y) {
-      NotificationManager.error('The line must have the same x or y ', 'Error');
+      NotificationManager.error(error.notSamePont, 'Error');
       isValid = false;
     }
   }
@@ -53,15 +54,15 @@ export const validateFigure = (
 
 export const validatePoint = (point: Point, canvasLayout: ElementCanvas[][]) => {
   const { x, y } = point;
-  let error = '';
+  let textError = '';
   if (typeof x !== 'number' || typeof y !== 'number' || isNaN(x) || isNaN(y)) {
-    error = 'Must be a number';
+    textError = error.notNumber;
   }
   if (x >= canvasLayout[0].length || x < 0) {
-    error = 'You are out of the field';
+    textError = error.outOfField;
   }
   if (y >= canvasLayout.length || y < 0) {
-    error = 'You are out of the field';
+    textError = error.outOfField;
   }
-  return error;
+  return textError;
 };
