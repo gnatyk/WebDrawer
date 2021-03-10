@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { Button, Input } from 'semantic-ui-react';
 import { Point, ElementCanvas } from '../../declarations';
 import { validateFigure, validateBusketFill } from '../../validations';
-import './styles.scss';
+import './styles.css';
 
 const options = [
   { value: 'rectangle', label: 'Rectangle' },

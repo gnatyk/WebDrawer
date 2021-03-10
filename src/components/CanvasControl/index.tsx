@@ -3,7 +3,7 @@ import { Button, Input } from 'semantic-ui-react';
 // @ts-ignore
 import { NotificationManager } from 'react-notifications';
 import { error } from '../../utils/constants';
-import './styles.scss';
+import './styles.css';
 
 interface CanvasControlType {
   createCanvas: (x: number, y: number) => void;

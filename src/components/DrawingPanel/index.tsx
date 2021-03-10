@@ -1,12 +1,12 @@
 import React from 'react';
 import { ElementCanvas } from '../../declarations';
-import './styles.scss';
+import './styles.css';
 
 interface DrawingPanelTypes {
   canvasLayout: ElementCanvas[][];
 }
 
-const DrawingPanel: React.FC<DrawingPanelTypes> = props => {
+const DrawingPanel: React.FC<DrawingPanelTypes> = (props) => {
   const { canvasLayout } = props;
   return (
     <div>
