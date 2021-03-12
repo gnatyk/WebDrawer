@@ -37,7 +37,7 @@ export const drawRectangle = (point1: Point, point2: Point, canvasLayout: Elemen
 };
 
 const isFilled = (point: Point, canvasLayout: ElementCanvas[][], color: string) => {
-  return (canvasLayout[point.x][point.y].background === color || canvasLayout[point.x][point.y].isBorder)
+  return (canvasLayout[point.y][point.x].background === color || canvasLayout[point.y][point.x].isBorder)
 }
 
 const pointHash = (point: { x: number, y: number }) => {
@@ -54,7 +54,7 @@ export const fillBusket = (point: Point, canvasLayout: ElementCanvas[][], color:
   while (cellsToFill.length) {
     currentCell = cellsToFill.shift()!!;
 
-    canvasLayout[currentCell.x][currentCell.y].background = color;
+    canvasLayout[currentCell.y][currentCell.x].background = color;
     const rightPoint = { x: currentCell.x + 1, y: currentCell.y }
     if (!validatePoint(rightPoint, canvasLayout) && !isFilled(rightPoint, canvasLayout, color) && !handledSells.has(pointHash(rightPoint))) {
       cellsToFill.push(rightPoint);
@@ -83,7 +83,9 @@ export const fillBusket = (point: Point, canvasLayout: ElementCanvas[][], color:
 };
 
 // previous fillBusket
-export const fillBusketOld = (point: Point, canvasLayout: ElementCanvas[][], color: string) => {
+export const fillBusketOld = (point: Point, initialCanvasLayout: ElementCanvas[][], color: string) => {
+  const canvasLayout = initialCanvasLayout.map(i => i.map(j => ({ ...j })));
+
   if (point.y === canvasLayout.length || point.y === -1) {
     return canvasLayout;
   }

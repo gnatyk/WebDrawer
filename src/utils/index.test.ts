@@ -43,7 +43,12 @@ describe('Utils', () => {
     it('Inside figure should not be filled color', () => {
       const canvas1 = drawRectangle({ x: 0, y: 0 }, { x: 3, y: 3 }, canvasLayoutStart)
       expect(fillBusket({ x: 0, y: 1 }, canvas1, color.fillBusketColor)).toEqual(canvas1);
+    })
 
+    it('should be filled color with different dimension', () => {
+      const canvas1 = createCanvas(1, 3);
+      const canvas2 = fillPoints([{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 }], color.fillBusketColor, canvas1, false)
+      expect(fillBusket({ x: 0, y: 1 }, canvas1, color.fillBusketColor)).toEqual(canvas2);
     })
   })
 
